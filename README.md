@@ -7,3 +7,8 @@ This version of the game features the ability to play against another player loc
 ## Installation
 
 Copy the file from the repository and proceed to install pygame.
+
+
+```bash
+pip install pygame
+```
