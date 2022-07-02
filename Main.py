@@ -255,6 +255,7 @@ class Game(): #Track scores, settings, players etc
             players.append([self.one.player,self.one.score_current])
             self.one.draw_snake()
 
+            occupied_blocks = []
             if self.game_type == 2 or self.game_type == 3: #if 2 snakes
                 players.append([self.two.player,self.two.score_current])
 
@@ -280,10 +281,12 @@ class Game(): #Track scores, settings, players etc
                 if self.two.check_eat_food(food,self.score_bonus_points):
                     food_eaten = True
                     self.two.grow_snake()
+                    occupied_blocks += self.two.blocks
 
             if self.one.check_eat_food(food,self.score_bonus_points):
                 food_eaten = True
                 self.one.grow_snake()
+                occupied_blocks += self.one.blocks
 
             self.print_game_info(players)
 
@@ -326,7 +329,7 @@ class Game(): #Track scores, settings, players etc
                     elif self.one.score_current < self.two.score_current:
                         game_over = 'p1'
             if food_eaten: #Check if food has been eaten by a player
-                food.move_food()
+                food.move_food(occupied_blocks)
                 food.draw_food()
                 
             #if not food_eaten:
@@ -860,12 +863,19 @@ class Food():
         #print('FOOD X: ' + str(self.block.current.x) + '  Y: ' + str(self.block.current.y))
         self.block.draw_block(self.screen, self.colour, 50, 50)
 
-    def eaten(self):
-        self.move_food()
-        return self.score_modifier
 
-    def move_food(self):
-        x, y = self.random_position()
+    def move_food(self, blocks):
+        original_pos = False
+        while not original_pos:
+            x, y = self.random_position()
+            match = False
+            for block in blocks:
+                if block.current.x == x and block.current.y == y:
+                    match = True
+
+            if not match:
+                original_pos = True
+
         self.block.current.x = x
         self.block.current.y = y
 
@@ -878,6 +888,3 @@ if __name__ == "__main__":
     game = Game()
     game.manage_game()
     game.quit()
-    
-    
-    # in check other, finds the direction but never moves to that place
