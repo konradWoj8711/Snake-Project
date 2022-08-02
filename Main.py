@@ -311,7 +311,7 @@ class Game(): #Track scores, settings, players etc
                             #print('Player 2 Move: ' + move)
                             self.two.set_direction(move)
                         else: #AI player 2
-                            self.two.set_direction(food) #pass food to AI
+                            self.two.set_direction(food, self.one.blocks) #pass food to AI
                     """
                     if game_type == 1 and player == 2:
                         print('Cannot make that move')
